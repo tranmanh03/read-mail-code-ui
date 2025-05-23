@@ -8,44 +8,112 @@
         font-family: Arial;
         margin: 30px;
       }
+
       .tabs {
         display: flex;
         gap: 10px;
         margin-bottom: 20px;
         flex-wrap: wrap;
       }
+
       .tab {
         padding: 10px 15px;
         background: #ddd;
         border-radius: 5px;
         cursor: pointer;
       }
+
       .tab.active {
         background: #4285f4;
         color: white;
       }
+
       .tab-content {
         display: none;
       }
+
       .tab-content.active {
         display: block;
       }
-      input,
+
+      textarea {
+        padding: 8px;
+        margin-top: 10px;
+        width: 99%;
+        font-size: 16px;
+      }
+
       button {
         padding: 8px;
         margin-top: 10px;
         width: 100%;
         font-size: 16px;
       }
+
       .output {
         margin-top: 10px;
         font-weight: bold;
         color: green;
       }
+
+      /* Spinner styles */
+      .spinner {
+        margin: 10px auto;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #4285f4;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+        display: none;
+      }
+
+      .rainbow-blink {
+  display: block;
+  margin: 20px 0;
+  font-weight: bold;
+  font-size: 16px;
+  animation: blinkColors 3s infinite;
+}
+
+.rainbow-blink a {
+  color: inherit;
+  text-decoration: underline;
+  font-style: italic;
+}
+
+@keyframes blinkColors {
+  0% { color: red; }
+  25% { color: blue; }
+  50% { color: violet; }
+  75% { color: orange; }
+  100% { color: red; }
+}
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
   </head>
   <body>
-    <h2>Lấy mã xác thực email</h2>
+    <div style="display: flex; justify-self: center; align-items: center; flex-direction: column;">
+        <h2>API GET CODE MAIL - BY MANHYY</h2>
+        <span class="rainbow-blink">
+            Welcome to 4U-Script
+            <a href="https://app.gpmautomate.com/store/4u-autoscript" target="_blank">Shop here</a>
+        </span>
+    </div>
+    <span style="margin: 20px 0; display: block;">
+        <span>Liên hệ manhyy qua Tele: <a style="font-style: italic;" href="https://t.me/Manhyy03">https://t.me/Manhyy03</a></span>
+        <br>
+        <br>
+        <span>Liên hệ manhyy facebook: <a style="font-style: italic;" href="https://www.facebook.com/pu.gau.374">https://www.facebook.com/pu.gau.374</a></span>
+    </span>
     <div class="tabs" id="tabs">
       <div class="tab active" data-tab="mailtm">Mail.tm</div>
       <div class="tab" data-tab="privatemail">PrivateMail</div>
@@ -57,41 +125,108 @@
 
     <div id="tabContents">
       <div class="tab-content active" id="tab-mailtm">
-        <input id="mailtm-input" placeholder="email|password" />
+        <p>
+          <strong>Mail.tm</strong>: Nhập email và mật khẩu của bạn để lấy mã xác
+          thực.
+          <br />
+          <span style="color: red; margin: 12px 0 0 0; display: block;"
+            >Danh sách email gửi đến mà API có thể lấy code:
+          </span>
+          <br />
+          <span style="color: blue; font-style: italic"
+            >["verify@x.com", "info@x.com",
+            "account-security-noreply@accountprotection.microsoft.com",
+            "noreply@account.tiktok.com"]</span
+          >
+          <br>
+        <p>
+          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+        </p>  
+        </p>
+        <textarea
+          id="mailtm-input"
+          rows="5"
+          placeholder="email|password"
+        ></textarea>
         <button onclick="callAPI('mailtm')">Lấy mã</button>
+        <div class="spinner" id="spinner-mailtm"></div>
         <div class="output" id="output-mailtm"></div>
       </div>
 
       <div class="tab-content" id="tab-privatemail">
-        <input
+        <p>
+          <strong>PrivateMail</strong>: Nhập emailUser|emailPass|targetEmail
+          <p>
+          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+        </p>  
+        </p>
+        <textarea
           id="privatemail-input"
+          rows="5"
           placeholder="emailUser|emailPass|targetEmail"
-        />
+        ></textarea>
         <button onclick="callAPI('privatemail')">Lấy mã</button>
+        <div class="spinner" id="spinner-privatemail"></div>
         <div class="output" id="output-privatemail"></div>
       </div>
 
       <div class="tab-content" id="tab-tempmail">
-        <input id="tempmail-input" placeholder="id|key" />
+        <p><strong>TempMail</strong>: Nhập id|key
+        <p>
+          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+        </p>  
+        </p>
+        <textarea id="tempmail-input" rows="5" placeholder="id|key"></textarea>
         <button onclick="callAPI('tempmail')">Lấy mã</button>
+        <div class="spinner" id="spinner-tempmail"></div>
         <div class="output" id="output-tempmail"></div>
       </div>
 
       <div class="tab-content" id="tab-gemmmo">
-        <input id="gemmmo-input" placeholder="email|password" />
+        <p><strong>Gemmmo</strong>: Nhập email|password
+        <p>
+          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+        </p>  
+        </p>
+        <textarea
+          id="gemmmo-input"
+          rows="5"
+          placeholder="email|password"
+        ></textarea>
         <button onclick="callAPI('gemmmo')">Lấy mã</button>
+        <div class="spinner" id="spinner-gemmmo"></div>
         <div class="output" id="output-gemmmo"></div>
       </div>
 
       <div class="tab-content" id="tab-hotmail">
-        <input id="hotmail-input" placeholder="email|refresh_token|client_id" />
+        <p><strong>Hotmail</strong>: Nhập email|refresh_token|client_id
+        <p>
+          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+        </p>  
+        </p>
+        <textarea
+          id="hotmail-input"
+          rows="5"
+          placeholder="email|refresh_token|client_id"
+        ></textarea>
         <button onclick="callAPI('hotmail')">Lấy mã</button>
+        <div class="spinner" id="spinner-hotmail"></div>
         <div class="output" id="output-hotmail"></div>
       </div>
 
       <div class="tab-content" id="tab-unlimitmail">
-        <input id="unlimitmail-input" placeholder="email|token" />
+        <p><strong>Unlimitmail</strong>: Nhập email|token
+        <p>
+          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+        </p>  
+        </p>
+        <textarea
+          id="unlimitmail-input"
+          rows="5"
+          placeholder="email|token"
+        ></textarea>
         <button onclick="callAPI('unlimitmail')">Lấy mã</button>
+        <div class="spinner" id="spinner-unlimitmail"></div>
         <div class="output" id="output-unlimitmail"></div>
       </div>
     </div>
@@ -107,7 +242,6 @@
           document
             .querySelectorAll(".tab-content")
             .forEach((c) => c.classList.remove("active"));
-
           tab.classList.add("active");
           document
             .getElementById(`tab-${tab.dataset.tab}`)
@@ -118,9 +252,12 @@
       async function callAPI(type) {
         const input = document.getElementById(`${type}-input`).value.trim();
         const output = document.getElementById(`output-${type}`);
-        const parts = input.split("||");
+        const spinner = document.getElementById(`spinner-${type}`);
+        const parts = input.split("|");
 
         let url = "";
+        output.innerText = "";
+        spinner.style.display = "block";
 
         try {
           switch (type) {
@@ -156,17 +293,19 @@
             }
             default:
               output.innerText = "Loại không hỗ trợ.";
+              spinner.style.display = "none";
               return;
           }
 
           const res = await fetch(url);
           const data = await res.json();
-
           output.innerText = `Mã xác thực: ${
             data.code || data.token || "Không có"
           }`;
         } catch (err) {
           output.innerText = "Lỗi gọi API!";
+        } finally {
+          spinner.style.display = "none";
         }
       }
     </script>

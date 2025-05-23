@@ -5,31 +5,84 @@
     <title>Mail Code Checker</title>
     <style>
       body {
-        font-family: Arial;
-        margin: 30px;
+        font-family: "Segoe UI", Arial, sans-serif;
+        margin: 0;
+        padding: 30px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        color: #333;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .header {
+        text-align: center;
+        display: flex;
+        justify-content: space-around;
+      }
+
+      .header img {
+        width: 100%;
+        max-width: 100px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .header-text {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      }
+
+      h2 {
+        color: #2c3e50;
+        font-weight: 600;
+        margin: 0;
       }
 
       .tabs {
         display: flex;
-        gap: 10px;
-        margin-bottom: 20px;
+        gap: 12px;
+        margin-bottom: 25px;
         flex-wrap: wrap;
+        justify-content: center;
       }
 
       .tab {
-        padding: 10px 15px;
-        background: #ddd;
-        border-radius: 5px;
+        padding: 12px 20px;
+        background: #e0e0e0;
+        border-radius: 8px;
         cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        color: #555;
+      }
+
+      .tab:hover {
+        background: #d0d0d0;
+        transform: translateY(-2px);
       }
 
       .tab.active {
         background: #4285f4;
         color: white;
+        box-shadow: 0 3px 8px rgba(66, 133, 244, 0.3);
       }
 
       .tab-content {
         display: none;
+        background: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #e0e0e0;
       }
 
       .tab-content.active {
@@ -37,58 +90,97 @@
       }
 
       textarea {
-        padding: 8px;
-        margin-top: 10px;
-        width: 99%;
+        padding: 12px;
+        margin-top: 15px;
+        width: 100%;
         font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        resize: vertical;
+        box-sizing: border-box;
+        transition: border-color 0.3s ease;
+      }
+
+      textarea:focus {
+        border-color: #4285f4;
+        outline: none;
+        box-shadow: 0 0 5px rgba(66, 133, 244, 0.2);
       }
 
       button {
-        padding: 8px;
-        margin-top: 10px;
+        padding: 12px;
+        margin-top: 15px;
         width: 100%;
         font-size: 16px;
+        background: #4285f4;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+      }
+
+      button:hover {
+        background: #3267d6;
       }
 
       .output {
-        margin-top: 10px;
-        font-weight: bold;
-        color: green;
+        margin-top: 15px;
+        font-weight: 600;
+        font-size: 16px;
+        font-style: italic;
+        color: #2ecc71; /* Green for the "Mã xác thực" text */
       }
 
-      /* Spinner styles */
+      .output::after {
+        content: attr(data-code); /* Add the code part dynamically */
+        color: #e74c3c; /* Red for the code */
+        font-style: normal; /* Code not italic */
+        margin-left: 5px;
+      }
+
       .spinner {
-        margin: 10px auto;
+        margin: 15px auto;
         border: 4px solid #f3f3f3;
         border-top: 4px solid #4285f4;
         border-radius: 50%;
-        width: 30px;
-        height: 30px;
+        width: 35px;
+        height: 35px;
         animation: spin 1s linear infinite;
         display: none;
       }
 
       .rainbow-blink {
-  display: block;
-  margin: 20px 0;
-  font-weight: bold;
-  font-size: 16px;
-  animation: blinkColors 3s infinite;
-}
+        display: block;
+        margin: 20px 0;
+        font-weight: bold;
+        font-size: 16px;
+        animation: blinkColors 3s infinite;
+      }
 
-.rainbow-blink a {
-  color: inherit;
-  text-decoration: underline;
-  font-style: italic;
-}
+      .rainbow-blink a {
+        color: inherit;
+        text-decoration: underline;
+        font-style: italic;
+      }
 
-@keyframes blinkColors {
-  0% { color: red; }
-  25% { color: blue; }
-  50% { color: violet; }
-  75% { color: orange; }
-  100% { color: red; }
-}
+      @keyframes blinkColors {
+        0% {
+          color: #ff4d4d;
+        }
+        25% {
+          color: #4285f4;
+        }
+        50% {
+          color: #9b59b6;
+        }
+        75% {
+          color: #f1c40f;
+        }
+        100% {
+          color: #ff4d4d;
+        }
+      }
 
       @keyframes spin {
         0% {
@@ -98,136 +190,198 @@
           transform: rotate(360deg);
         }
       }
+
+      .contact-links {
+        margin: 0 0 20px 0;
+        display: block;
+        text-align: center;
+        font-size: 16px;
+      }
+
+      .contact-links a {
+        color: #4285f4;
+        text-decoration: none;
+        font-style: italic;
+        transition: color 0.3s ease;
+      }
+
+      .contact-links a:hover {
+        color: #3267d6;
+        text-decoration: underline;
+      }
+
+      .tab-content p {
+        margin: 0 0 15px;
+        line-height: 1.6;
+      }
+
+      .tab-content strong {
+        color: #2c3e50;
+      }
+
+      .tab-content span[style*="color: red"] {
+        color: #e74c3c !important;
+        font-weight: 500;
+      }
+
+      .tab-content span[style*="color: blue"] {
+        color: #4285f4 !important;
+        font-style: italic;
+      }
     </style>
   </head>
   <body>
-    <div style="display: flex; justify-self: center; align-items: center; flex-direction: column;">
-        <h2>API GET CODE MAIL - BY MANHYY</h2>
-        <span class="rainbow-blink">
-            Welcome to 4U-Script
-            <a href="https://app.gpmautomate.com/store/4u-autoscript" target="_blank">Shop here</a>
-        </span>
-    </div>
-    <span style="margin: 20px 0; display: block;">
-        <span>Liên hệ manhyy qua Tele: <a style="font-style: italic;" href="https://t.me/Manhyy03">https://t.me/Manhyy03</a></span>
-        <br>
-        <br>
-        <span>Liên hệ manhyy facebook: <a style="font-style: italic;" href="https://www.facebook.com/pu.gau.374">https://www.facebook.com/pu.gau.374</a></span>
-    </span>
-    <div class="tabs" id="tabs">
-      <div class="tab active" data-tab="mailtm">Mail.tm</div>
-      <div class="tab" data-tab="privatemail">PrivateMail</div>
-      <div class="tab" data-tab="tempmail">TempMail</div>
-      <div class="tab" data-tab="gemmmo">Gemmmo</div>
-      <div class="tab" data-tab="hotmail">Hotmail</div>
-      <div class="tab" data-tab="unlimitmail">Unlimitmail</div>
-    </div>
-
-    <div id="tabContents">
-      <div class="tab-content active" id="tab-mailtm">
-        <p>
-          <strong>Mail.tm</strong>: Nhập email và mật khẩu của bạn để lấy mã xác
-          thực.
-          <br />
-          <span style="color: red; margin: 12px 0 0 0; display: block;"
-            >Danh sách email gửi đến mà API có thể lấy code:
+    <div class="container">
+      <div class="header">
+        <div class="header-text">
+          <h2>API GET CODE MAIL - BY MANHYY</h2>
+          <span class="rainbow-blink">
+            Welcome to 4U-Script -
+            <a
+              href="https://app.gpmautomate.com/store/4u-autoscript"
+              target="_blank"
+            >
+              Go to GPM store</a
+            >
           </span>
-          <br />
-          <span style="color: blue; font-style: italic"
-            >["verify@x.com", "info@x.com",
-            "account-security-noreply@accountprotection.microsoft.com",
-            "noreply@account.tiktok.com"]</span
-          >
-          <br>
-        <p>
-          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
-        </p>  
-        </p>
-        <textarea
-          id="mailtm-input"
-          rows="5"
-          placeholder="email|password"
-        ></textarea>
-        <button onclick="callAPI('mailtm')">Lấy mã</button>
-        <div class="spinner" id="spinner-mailtm"></div>
-        <div class="output" id="output-mailtm"></div>
+        </div>
+        <div class="header-image">
+          <img
+            src="https://res.cloudinary.com/dyhnccnbh/image/upload/v1747996394/avatar_rjw899.jpg"
+            alt="Avatar Manhyy"
+          />
+        </div>
+      </div>
+      <span class="contact-links">
+        <span
+          >Liên hệ manhyy qua Tele:
+          <a href="https://t.me/Manhyy03">https://t.me/Manhyy03</a></span
+        >
+        <br />
+        <span style="margin-top: 4px; display: block"
+          >Liên hệ manhyy facebook:
+          <a href="https://www.facebook.com/pu.gau.374"
+            >https://www.facebook.com/pu.gau.374</a
+          ></span
+        >
+      </span>
+      <div class="tabs" id="tabs">
+        <div class="tab active" data-tab="mailtm">Mail.tm</div>
+        <div class="tab" data-tab="privatemail">PrivateMail</div>
+        <div class="tab" data-tab="tempmail">TempMail</div>
+        <div class="tab" data-tab="gemmmo">Gemmmo</div>
+        <div class="tab" data-tab="hotmail">Hotmail</div>
+        <div class="tab" data-tab="unlimitmail">Unlimitmail</div>
       </div>
 
-      <div class="tab-content" id="tab-privatemail">
-        <p>
-          <strong>PrivateMail</strong>: Nhập emailUser|emailPass|targetEmail
+      <div id="tabContents">
+        <div class="tab-content active" id="tab-mailtm">
           <p>
-          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
-        </p>  
-        </p>
-        <textarea
-          id="privatemail-input"
-          rows="5"
-          placeholder="emailUser|emailPass|targetEmail"
-        ></textarea>
-        <button onclick="callAPI('privatemail')">Lấy mã</button>
-        <div class="spinner" id="spinner-privatemail"></div>
-        <div class="output" id="output-privatemail"></div>
-      </div>
+            <strong>Mail.tm</strong>: Nhập email và mật khẩu của bạn để lấy mã
+            xác thực.
+            <br />
+            <span style="color: red; margin: 12px 0 0 0; display: block">
+              Danh sách email gửi đến mà API có thể lấy code:
+              <span style="color: blue; font-style: italic">
+                email X, email từ Microsoft
+              </span>
+            </span>
+          </p>
+          <p>
+            <strong>Lưu ý</strong>: Khi mã trả về <strong>111111</strong>, có
+            thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+          </p>
+          <textarea
+            id="mailtm-input"
+            rows="5"
+            placeholder="email|password"
+          ></textarea>
+          <button onclick="callAPI('mailtm')">Lấy mã</button>
+          <div class="spinner" id="spinner-mailtm"></div>
+          <div class="output" id="output-mailtm"></div>
+        </div>
 
-      <div class="tab-content" id="tab-tempmail">
-        <p><strong>TempMail</strong>: Nhập id|key
-        <p>
-          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
-        </p>  
-        </p>
-        <textarea id="tempmail-input" rows="5" placeholder="id|key"></textarea>
-        <button onclick="callAPI('tempmail')">Lấy mã</button>
-        <div class="spinner" id="spinner-tempmail"></div>
-        <div class="output" id="output-tempmail"></div>
-      </div>
+        <div class="tab-content" id="tab-privatemail">
+          <p>
+            <strong>PrivateMail</strong>: Nhập emailUser|emailPass|targetEmail
+          </p>
+          <p>
+            <strong>Lưu ý</strong>: Khi mã trả về <strong>111111</strong>, có
+            thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+          </p>
+          <textarea
+            id="privatemail-input"
+            rows="5"
+            placeholder="emailUser|emailPass|targetEmail"
+          ></textarea>
+          <button onclick="callAPI('privatemail')">Lấy mã</button>
+          <div class="spinner" id="spinner-privatemail"></div>
+          <div class="output" id="output-privatemail"></div>
+        </div>
 
-      <div class="tab-content" id="tab-gemmmo">
-        <p><strong>Gemmmo</strong>: Nhập email|password
-        <p>
-          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
-        </p>  
-        </p>
-        <textarea
-          id="gemmmo-input"
-          rows="5"
-          placeholder="email|password"
-        ></textarea>
-        <button onclick="callAPI('gemmmo')">Lấy mã</button>
-        <div class="spinner" id="spinner-gemmmo"></div>
-        <div class="output" id="output-gemmmo"></div>
-      </div>
+        <div class="tab-content" id="tab-tempmail">
+          <p><strong>TempMail</strong>: Nhập id|key</p>
+          <p>
+            <strong>Lưu ý</strong>: Khi mã trả về <strong>111111</strong>, có
+            thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+          </p>
+          <textarea
+            id="tempmail-input"
+            rows="5"
+            placeholder="id|key"
+          ></textarea>
+          <button onclick="callAPI('tempmail')">Lấy mã</button>
+          <div class="spinner" id="spinner-tempmail"></div>
+          <div class="output" id="output-tempmail"></div>
+        </div>
 
-      <div class="tab-content" id="tab-hotmail">
-        <p><strong>Hotmail</strong>: Nhập email|refresh_token|client_id
-        <p>
-          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
-        </p>  
-        </p>
-        <textarea
-          id="hotmail-input"
-          rows="5"
-          placeholder="email|refresh_token|client_id"
-        ></textarea>
-        <button onclick="callAPI('hotmail')">Lấy mã</button>
-        <div class="spinner" id="spinner-hotmail"></div>
-        <div class="output" id="output-hotmail"></div>
-      </div>
+        <div class="tab-content" id="tab-gemmmo">
+          <p><strong>Gemmmo</strong>: Nhập email|password</p>
+          <p>
+            <strong>Lưu ý</strong>: Khi mã trả về <strong>111111</strong>, có
+            thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+          </p>
+          <textarea
+            id="gemmmo-input"
+            rows="5"
+            placeholder="email|password"
+          ></textarea>
+          <button onclick="callAPI('gemmmo')">Lấy mã</button>
+          <div class="spinner" id="spinner-gemmmo"></div>
+          <div class="output" id="output-gemmmo"></div>
+        </div>
 
-      <div class="tab-content" id="tab-unlimitmail">
-        <p><strong>Unlimitmail</strong>: Nhập email|token
-        <p>
-          <strong>Lưu ý</strong>: Khi mã trả về 111111, có thể do mail chưa nhận được thư hoặc truyền sai đầu vào
-        </p>  
-        </p>
-        <textarea
-          id="unlimitmail-input"
-          rows="5"
-          placeholder="email|token"
-        ></textarea>
-        <button onclick="callAPI('unlimitmail')">Lấy mã</button>
-        <div class="spinner" id="spinner-unlimitmail"></div>
-        <div class="output" id="output-unlimitmail"></div>
+        <div class="tab-content" id="tab-hotmail">
+          <p><strong>Hotmail</strong>: Nhập email|refresh_token|client_id</p>
+          <p>
+            <strong>Lưu ý</strong>: Khi mã trả về <strong>111111</strong>, có
+            thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+          </p>
+          <textarea
+            id="hotmail-input"
+            rows="5"
+            placeholder="email|refresh_token|client_id"
+          ></textarea>
+          <button onclick="callAPI('hotmail')">Lấy mã</button>
+          <div class="spinner" id="spinner-hotmail"></div>
+          <div class="output" id="output-hotmail"></div>
+        </div>
+
+        <div class="tab-content" id="tab-unlimitmail">
+          <p><strong>Unlimitmail</strong>: Nhập email|token</p>
+          <p>
+            <strong>Lưu ý</strong>: Khi mã trả về <strong>111111</strong>, có
+            thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+          </p>
+          <textarea
+            id="unlimitmail-input"
+            rows="5"
+            placeholder="email|token"
+          ></textarea>
+          <button onclick="callAPI('unlimitmail')">Lấy mã</button>
+          <div class="spinner" id="spinner-unlimitmail"></div>
+          <div class="output" id="output-unlimitmail"></div>
+        </div>
       </div>
     </div>
 
@@ -293,17 +447,19 @@
             }
             default:
               output.innerText = "Loại không hỗ trợ.";
+              output.removeAttribute("data-code");
               spinner.style.display = "none";
               return;
           }
 
           const res = await fetch(url);
           const data = await res.json();
-          output.innerText = `Mã xác thực: ${
-            data.code || data.token || "Không có"
-          }`;
+          const code = data.code || data.token || "Không có";
+          output.innerText = "Mã xác thực: ";
+          output.setAttribute("data-code", code);
         } catch (err) {
           output.innerText = "Lỗi gọi API!";
+          output.removeAttribute("data-code");
         } finally {
           spinner.style.display = "none";
         }

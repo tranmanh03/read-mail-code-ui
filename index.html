@@ -130,6 +130,11 @@
         font-size: 16px;
         font-style: italic;
         color: #2ecc71; /* Green for the "Mã xác thực" text */
+        max-width: 100%;              /* Không vượt quá chiều rộng cha */
+  overflow-wrap: break-word;    /* Ngắt từ nếu quá dài */
+  word-break: break-all;        /* Ngắt ký tự nếu cần */
+  white-space: normal;          /* Cho phép xuống dòng */
+  overflow: hidden;   
       }
 
       .output::after {
@@ -228,6 +233,12 @@
         color: #4285f4 !important;
         font-style: italic;
       }
+
+      .domainmail-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+      }
     </style>
   </head>
   <body>
@@ -272,6 +283,7 @@
         <div class="tab" data-tab="gemmmo">Gemmmo</div>
         <div class="tab" data-tab="hotmail">Hotmail</div>
         <div class="tab" data-tab="unlimitmail">Unlimitmail</div>
+        <div class="tab" data-tab="domainmail">Domain Mail</div>
       </div>
 
       <div id="tabContents">
@@ -298,7 +310,7 @@
           ></textarea>
           <button onclick="callAPI('mailtm')">Lấy mã</button>
           <div class="spinner" id="spinner-mailtm"></div>
-          <div class="output" id="output-mailtm"></div>
+          <div class="output" id="output-mailtm" ></div>
         </div>
 
         <div class="tab-content" id="tab-privatemail">
@@ -316,7 +328,7 @@
           ></textarea>
           <button onclick="callAPI('privatemail')">Lấy mã</button>
           <div class="spinner" id="spinner-privatemail"></div>
-          <div class="output" id="output-privatemail"></div>
+          <div class="output" id="output-privatemail" ></div>
         </div>
 
         <div class="tab-content" id="tab-tempmail">
@@ -332,7 +344,7 @@
           ></textarea>
           <button onclick="callAPI('tempmail')">Lấy mã</button>
           <div class="spinner" id="spinner-tempmail"></div>
-          <div class="output" id="output-tempmail"></div>
+          <div class="output" id="output-tempmail" ></div>
         </div>
 
         <div class="tab-content" id="tab-gemmmo">
@@ -348,7 +360,7 @@
           ></textarea>
           <button onclick="callAPI('gemmmo')">Lấy mã</button>
           <div class="spinner" id="spinner-gemmmo"></div>
-          <div class="output" id="output-gemmmo"></div>
+          <div class="output" id="output-gemmmo" ></div>
         </div>
 
         <div class="tab-content" id="tab-hotmail">
@@ -364,7 +376,7 @@
           ></textarea>
           <button onclick="callAPI('hotmail')">Lấy mã</button>
           <div class="spinner" id="spinner-hotmail"></div>
-          <div class="output" id="output-hotmail"></div>
+          <div class="output" id="output-hotmail" ></div>
         </div>
 
         <div class="tab-content" id="tab-unlimitmail">
@@ -380,8 +392,28 @@
           ></textarea>
           <button onclick="callAPI('unlimitmail')">Lấy mã</button>
           <div class="spinner" id="spinner-unlimitmail"></div>
-          <div class="output" id="output-unlimitmail"></div>
+          <div class="output" id="output-unlimitmail" ></div>
         </div>
+
+        <div class="tab-content" id="tab-domainmail">
+          <p>
+            <strong>Domain mail</strong>: Nhập token|email|account_id
+          </p>
+          <p>
+            <strong>Lưu ý</strong>: Khi <i>code</i> về <strong><i>111111</i></strong>, <i>link</i> trả về <strong><i>error</i></strong>, có
+            thể do mail chưa nhận được thư hoặc truyền sai đầu vào
+          </p>
+          <textarea
+            id="domainmail-input"
+            rows="5"
+            placeholder="token|email|account_id"
+          ></textarea>
+          <div class="domainmail-buttons">
+            <button onclick="callAPI('domainmail', {action: 'get-code'})">Lấy mã</button>
+            <button onclick="callAPI('domainmail', {action: 'get-link'})">Lấy link verify</button>
+          </div>
+          <div class="spinner" id="spinner-domainmail"></div>
+          <div class="output" id="output-domainmail" ></div>
       </div>
     </div>
 
@@ -403,7 +435,7 @@
         });
       });
 
-      async function callAPI(type) {
+      async function callAPI(type, options = {}) {
         const input = document.getElementById(`${type}-input`).value.trim();
         const output = document.getElementById(`output-${type}`);
         const spinner = document.getElementById(`spinner-${type}`);
@@ -445,6 +477,15 @@
               url = `${BASE_URL}get_unlimitmail_code?email=${email}&token=${token}`;
               break;
             }
+            case "domainmail": {
+              const [token, email, account_id] = parts;
+              if (options.action === 'get-code') {
+                url = `${BASE_URL}get-domainmail-code?token=${token}&email=${email}&account_id=${account_id}`;
+              } else {
+                url = `${BASE_URL}get-link-verify?token=${token}&email=${email}&account_id=${account_id}`;
+              }
+              break;
+            }
             default:
               output.innerText = "Loại không hỗ trợ.";
               output.removeAttribute("data-code");
@@ -454,12 +495,10 @@
 
           const res = await fetch(url);
           const data = await res.json();
-          const code = data.code || data.token || "Không có";
-          output.innerText = "Mã xác thực: ";
-          output.setAttribute("data-code", code);
+          const result = data.code || data.token || data.link || "Không có";
+          output.innerHTML = `<span style="font-weight: bold; color: red">Kết quả: </span><span style="color: #27ae60;">${result}</span>`;
         } catch (err) {
-          output.innerText = "Lỗi gọi API!";
-          output.removeAttribute("data-code");
+          output.innerText = `<span style="font-weight: bold; color: red">Kết quả: </span><span style="color: #27ae60;">Lỗi gọi API!</span>`;
         } finally {
           spinner.style.display = "none";
         }

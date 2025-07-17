@@ -233,3 +233,57 @@ button:hover {
   gap: 10px;
   margin-top: 15px;
 }
+
+.group_create_email {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.create-email-link {
+  display: inline-block;
+  padding: 8px 16px;
+  color: white;
+  background-color: #2563eb;
+  border-radius: 6px;
+  text-decoration: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s ease;
+}
+
+.create-email-link:hover {
+  background-color: #1d4ed8;
+  cursor: pointer;
+}
+
+.group-result_create_email {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  margin-left: 24px;
+}
+
+.result_create_email.loading-dots::after {
+  content: "";
+  display: inline-block;
+  animation: dots 1.2s steps(3, end) infinite;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 4px;
+}
+
+@keyframes dots {
+  0% {
+    content: "";
+  }
+  33% {
+    content: ".";
+  }
+  66% {
+    content: "..";
+  }
+  100% {
+    content: "...";
+  }
+}

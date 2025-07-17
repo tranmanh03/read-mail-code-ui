@@ -1,4 +1,3 @@
-
 const BASE_URL = "https://read-mail-code-production.up.railway.app/";
 
 document.querySelectorAll(".tab").forEach((tab) => {
@@ -15,6 +14,29 @@ document.querySelectorAll(".tab").forEach((tab) => {
             .classList.add("active");
     });
 });
+
+const handleCreateMailTM = async () => {
+    const result = document.querySelector(".result_create_email");
+
+    result.classList.add("loading-dots");
+    result.innerText = "";
+
+    try {
+        const res = await fetch("https://read-mail-code-production.up.railway.app/create-email");
+        const data = await res.json();
+
+        if (!!data.email && !!data.password) {
+            result.classList.remove("loading-dots");
+            result.innerText = `${data.email}|${data.password}`;
+        } else {
+            result.classList.remove("loading-dots");
+            result.innerText = "Error: Invalid data.";
+        }
+    } catch (err) {
+        result.classList.remove("loading-dots");
+        result.innerText = "Fetch failed.";
+    }
+};
 
 async function callAPI(type, options = {}) {
     const input = document.getElementById(`${type}-input`).value.trim();

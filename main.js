@@ -17,26 +17,35 @@ document.querySelectorAll(".tab").forEach((tab) => {
 
 const handleCreateMailTM = async () => {
     const result = document.querySelector(".result_create_email");
-
     result.classList.add("loading-dots");
     result.innerText = "";
 
-    try {
-        const res = await fetch("https://read-mail-code-production.up.railway.app/create-email");
-        const data = await res.json();
+    let attempt = 0;
+    let data = null;
 
-        if (!!data.email && !!data.password) {
-            result.classList.remove("loading-dots");
-            result.innerText = `${data.email}|${data.password}`;
-        } else {
-            result.classList.remove("loading-dots");
-            result.innerText = "Error: Invalid data.";
+    while (attempt < 5) {
+        try {
+            const res = await fetch("https://read-mail-code-production.up.railway.app/create-email");
+            data = await res.json();
+            if (data.email && data.password && data.email !== "error") {
+                break;
+            }
+        } catch (err) {
         }
-    } catch (err) {
-        result.classList.remove("loading-dots");
-        result.innerText = "Fetch failed.";
+
+        attempt++;
+        await new Promise(resolve => setTimeout(resolve, 2000));
+    }
+
+    result.classList.remove("loading-dots");
+
+    if (data && data.email && data.password && data.email !== "error") {
+        result.innerText = `${data.email}|${data.password}`;
+    } else {
+        result.innerText = "Error: Failed after 5 attempts.";
     }
 };
+
 
 async function callAPI(type, options = {}) {
     const input = document.getElementById(`${type}-input`).value.trim();
